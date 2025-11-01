@@ -2,13 +2,12 @@
 // Created by konov on 11/1/2025.
 //
 
-#ifndef HMW_1_DB1_HPP
-#define HMW_1_DB1_HPP
-
+#ifndef HMW_1_DP_1_LM_HPP
+#define HMW_1_DP_1_LM_HPP
 #include "IStudent_db.hpp"
 #include <unordered_map>
 
-class StudentDB_1 final : public Interface_StudentDB {
+class StudentDB_1LessMemory final : public Interface_StudentDB {
 public:
     void load(const std::string& csv_path) override;
 
@@ -23,10 +22,12 @@ private:
     // email -> student
     std::unordered_map<std::string, Student*> email_map;
     // month/day index → students
-    // key = month * 32 + day
+    // key = month * 32 + day ~ month << 5 | day, because day < 32
     std::unordered_map<int, std::vector<Student*>> birthday_map;
 
     // group → (birthday → count)
-    std::unordered_map<std::string, std::unordered_map<int,int>> group_birth_count;
+    std::unordered_map<std::string, std::array<int, 416>> group_birth_count;
 };
-#endif //HMW_1_DB1_HPP
+
+
+#endif //HMW_1_DP_1_LM_HPP
