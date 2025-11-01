@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.5.2)
+project(hmw_1)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+#Library with db
+add_library(student_dp STATIC
+        src/student.cpp
+        src/utils.cpp
+        src/generator.cpp
+        src/db1.cpp
+        src/db2.cpp
+        src/db3.cpp
+        sorting/mysort.cpp
+)
+
+target_include_directories(student_dp PUBLIC include)
+
+#Main
+add_executable(hmw_1
+        src/main.cpp
+)
+
+target_link_libraries(hmw_1
+        student_dp
+)
+
+#Benchmark
+add_executable(benchmark
+        benchmarks/benchmark.cpp
+)
+
+target_include_directories(benchmark PUBLIC include)
+
+target_link_libraries(benchmark
+        student_dp
+)
