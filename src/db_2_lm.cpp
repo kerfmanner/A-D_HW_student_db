@@ -2,11 +2,13 @@
 // Created by konov on 11/1/2025.
 //
 
-#include "../include/db2.hpp"
+#include "../include/db_2_lm.hpp"
 #include <ranges>
 #include "utils.hpp"
 
-void StudentDB_2::load(const std::string &csv_path) {
+
+
+void StudentDB_2LessMemory::load(const std::string &csv_path) {
     students = read_students_from_csv(csv_path);
 
     for (auto& student : students) {
@@ -21,14 +23,14 @@ void StudentDB_2::load(const std::string &csv_path) {
 }
 
 
-std::vector<Student *> StudentDB_2::find_by_birth(const int month, const int day) {
+std::vector<Student *> StudentDB_2LessMemory::find_by_birth(const int month, const int day) {
     const int key = birthday_key(month, day);
     if (!birthday_map.contains(key)) return {};
     return birthday_map[key];
 };
 
 
-bool StudentDB_2::change_group(const std::string &email, const std::string &new_group) {
+bool StudentDB_2LessMemory::change_group(const std::string &email, const std::string &new_group) {
     if (!email_map.contains(email)) return false;
     Student *student = email_map[email];
 
@@ -44,16 +46,19 @@ bool StudentDB_2::change_group(const std::string &email, const std::string &new_
     return true;
 }
 
-std::string StudentDB_2::find_group_with_max_same_birthday() {
-    int max_group = -1;
-    std::string max_group_str;
-    for (auto&[fst, snd]: group_birth_count) {
-        for (const auto &val: snd | std::views::values) {
-            if (val  > max_group) {
-                max_group = val ;
-                max_group_str = fst;
+std::string StudentDB_2LessMemory::find_group_with_max_same_birthday() {
+    int best_count = -1;
+    std::string best_group;
+
+    for (const auto& [group, arr] : group_birth_count) {
+        // scan 416 birthday counters
+        // we can start from 33 because it is the minimal possible key
+        for (int i = 33; i < 416; ++i) {
+            if (const int c = arr[i]; c > best_count) {
+                best_count = c;
+                best_group = group;
             }
         }
     }
-    return max_group_str;
+    return best_group;
 }

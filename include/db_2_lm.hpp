@@ -2,16 +2,15 @@
 // Created by konov on 11/1/2025.
 //
 
-#ifndef HMW_1_DB2_HPP
-#define HMW_1_DB2_HPP
-
+#ifndef HMW_1_DB_2_LM_HPP
+#define HMW_1_DB_2_LM_HPP
 
 #include "IStudent_db.hpp"
 #include <map>
 #include <vector>
 #include <string>
 
-class StudentDB_2 final : public Interface_StudentDB {
+class StudentDB_2LessMemory final : public Interface_StudentDB {
 public:
     void load(const std::string& csv_path) override;
 
@@ -26,11 +25,11 @@ private:
     // email -> student
     std::map<std::string, Student*> email_map;
     // month/day index → students
-    // key = month * 32 + day
+    // key = month * 32 + day ~ month << 5 | day, because day < 32
     std::map<int, std::vector<Student*>> birthday_map;
 
-    std::map<std::string, std::map<int,int>> group_birth_count;
+    std::map<std::string, std::array<int, 416>> group_birth_count;
 };
 
 
-#endif //HMW_1_DB2_HPP
+#endif //HMW_1_DB_2_LM_HPP
