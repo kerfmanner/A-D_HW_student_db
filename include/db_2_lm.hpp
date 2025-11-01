@@ -25,7 +25,7 @@ private:
     // email -> student
     std::map<std::string, Student*> email_map;
     // month/day index → students
-    // key = month * 32 + day ~ month << 5 | day, because day < 32
+    // key = month * 32 + day = month << 5 | day, because day < 32
     std::map<int, std::vector<Student*>> birthday_map;
 
     std::map<std::string, std::array<int, 416>> group_birth_count;
