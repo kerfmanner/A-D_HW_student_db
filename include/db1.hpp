@@ -23,7 +23,7 @@ private:
     // email -> student
     std::unordered_map<std::string, Student*> email_map;
     // month/day index → students
-    // key = month * 32 + day
+    // key = month * 32 + day = month << 5 | day, because day < 32
     std::unordered_map<int, std::vector<Student*>> birthday_map;
 
     // group → (birthday → count)
