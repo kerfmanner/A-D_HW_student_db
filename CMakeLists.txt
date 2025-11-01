@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.2)
+cmake_minimum_required(VERSION 3.11)
 project(hmw_1)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -9,11 +9,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 add_library(student_dp STATIC
         src/student.cpp
         src/utils.cpp
-        src/generator.cpp
         src/db1.cpp
         src/db2.cpp
         src/db3.cpp
-        sorting/mysort.cpp
+        src/db_1_lm.cpp
+        src/db_2_lm.cpp
+        src/sort_phone.cpp
 )
 
 target_include_directories(student_dp PUBLIC include)
