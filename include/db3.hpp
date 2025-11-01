@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-class StudentDB_Sorted : public Interface_StudentDB {
+class StudentDB_3 : public Interface_StudentDB {
 public:
     void load(const std::string& csv_path) override;
 
@@ -21,12 +21,8 @@ private:
     // Primary storage
     std::vector<Student> students;
 
-    // Sorted views / indexes
     std::vector<Student*> by_email;    // sorted by email
     std::vector<Student*> by_birth;    // sorted by (month, day)
-
-    // Optional: group birthday array or recompute counts
-    // This method is intentionally slow — recomputes when needed
 };
 
 #endif //HMW_1_DB3_HPP
