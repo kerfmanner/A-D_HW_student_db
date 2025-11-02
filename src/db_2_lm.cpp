@@ -18,7 +18,11 @@ void StudentDB_2LessMemory::load(const std::string &csv_path) {
 
         email_map[student.m_email] = &student;
 
-        group_birth_count[student.m_group][key]++;
+        auto& vec = group_birth_count[student.m_group];
+        if (vec.empty()) {
+            vec.resize(MAX_BDAY, 0);
+        }
+        vec[key]++;
     }
 }
 
@@ -40,25 +44,26 @@ bool StudentDB_2LessMemory::change_group(const std::string &email, const std::st
 
     const int key = birthday_key(student -> m_birth_month, student->m_birth_day);
 
-    group_birth_count[student->m_group][key]--;
-    student->m_group = new_group;
-    group_birth_count[student->m_group][key]++;
+    auto& oldv = group_birth_count[student -> m_group];
+    oldv[key]--;
+
+    auto& newv = group_birth_count[new_group];
+    if (newv.empty()) newv.resize(MAX_BDAY, 0);
+    newv[key]++;
     return true;
 }
 
 std::string StudentDB_2LessMemory::find_group_with_max_same_birthday() {
-    int best_count = -1;
-    std::string best_group;
+    std::string best;
+    int mx = -1;
 
-    for (const auto& [group, arr] : group_birth_count) {
-        // scan 416 birthday counters
-        // we can start from 33 because it is the minimal possible key
-        for (int i = 33; i < 416; ++i) {
-            if (const int c = arr[i]; c > best_count) {
-                best_count = c;
-                best_group = group;
+    for (auto& [g, vec] : group_birth_count) {
+        for (auto c : vec) {
+            if (c > mx) {
+                mx = c;
+                best = g;
             }
         }
     }
-    return best_group;
+    return best;
 }

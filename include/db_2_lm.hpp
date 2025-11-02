@@ -5,6 +5,8 @@
 #ifndef HMW_1_DB_2_LM_HPP
 #define HMW_1_DB_2_LM_HPP
 
+#include <cstdint>
+
 #include "IStudent_db.hpp"
 #include <map>
 #include <vector>
@@ -28,7 +30,8 @@ private:
     // key = month * 32 + day = month << 5 | day, because day < 32
     std::map<int, std::vector<Student*>> birthday_map;
 
-    std::map<std::string, std::array<int, 416>> group_birth_count;
+    static constexpr int MAX_BDAY = 416;
+    std::map<std::string, std::vector<uint16_t>> group_birth_count;
 };
 
 
