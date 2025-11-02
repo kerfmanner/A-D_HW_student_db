@@ -4,6 +4,8 @@
 
 #ifndef HMW_1_DP_1_LM_HPP
 #define HMW_1_DP_1_LM_HPP
+#include <cstdint>
+
 #include "IStudent_db.hpp"
 #include <unordered_map>
 
@@ -26,7 +28,8 @@ private:
     std::unordered_map<int, std::vector<Student*>> birthday_map;
 
     // group → (birthday → count)
-    std::unordered_map<std::string, std::array<int, 416>> group_birth_count;
+    static constexpr int MAX_BDAY = 416;
+    std::unordered_map<std::string, std::vector<uint16_t>> group_birth_count;
 };
 
 
