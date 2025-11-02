@@ -1,0 +1,9 @@
+method,input_size,time_ms
+builtin,100,0
+builtin,1000,4
+builtin,10000,43
+builtin,100000,566
+radix,100,0
+radix,1000,1
+radix,10000,14
+radix,100000,142
