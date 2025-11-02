@@ -8,10 +8,15 @@
 #include <vector>
 #include "student.hpp"
 
-std::string normalize_phone(const std::string& phone);
+struct NormalPhoneEntries {
+    Student m_student;
+    std::string normal_phone;
+};
+
 
 void sort_by_phone_builtin(std::vector<Student>& students);
 
+void radix_sort_phone_entries(std::vector<NormalPhoneEntries>& entries);
 void sort_by_phone_radix(std::vector<Student>& students);
 
 
