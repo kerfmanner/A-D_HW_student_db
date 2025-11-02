@@ -13,8 +13,11 @@ add_library(student_dp STATIC
         src/db2.cpp
         src/db3.cpp
         src/db_1_lm.cpp
+        src/db1_sp.cpp
         src/db_2_lm.cpp
+        src/dp2_sp.cpp
         src/sort_phone.cpp
+
 )
 
 target_include_directories(student_dp PUBLIC include)
@@ -38,3 +41,10 @@ target_include_directories(benchmark PUBLIC include)
 target_link_libraries(benchmark
         student_dp
 )
+add_executable(srt_bench
+        benchmarks/sorting_benchmark.cpp)
+
+target_include_directories(srt_bench PUBLIC include)
+
+target_link_libraries(srt_bench
+        student_dp)

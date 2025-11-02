@@ -7,20 +7,24 @@
 
 #include "IStudent_db.hpp"
 #include "db1.hpp"
+#include "db1_sp.hpp"
 #include "db2.hpp"
 #include "db3.hpp"
 #include "db_1_lm.hpp"
 #include "db_2_lm.hpp"
+#include "dp2_sp.hpp"
 #include "utils.hpp"
 
 
 // construct db
 static std::unique_ptr<Interface_StudentDB> make_db(const std::string& name) {
-    if (name == "1")       return std::make_unique<StudentDB_1>();
-    if (name == "1L")      return std::make_unique<StudentDB_1LessMemory>();
-    if (name == "2")       return std::make_unique<StudentDB_2>();
-    if (name == "2L")      return std::make_unique<StudentDB_2LessMemory>();
-    if (name == "3")       return std::make_unique<StudentDB_3>();
+    if (name == "1")    return std::make_unique<StudentDB_1>();
+    if (name == "1L")   return std::make_unique<StudentDB_1LessMemory>();
+    if (name == "1S")   return std::make_unique<StudentDB_1Speed>();
+    if (name == "2")    return std::make_unique<StudentDB_2>();
+    if (name == "2L")   return std::make_unique<StudentDB_2LessMemory>();
+    if (name == "2S")   return std::make_unique<StudentDB_2Speed>();
+    if (name == "3")    return std::make_unique<StudentDB_3>();
 
     throw std::invalid_argument("Unknown DB type: " + name);
 }
@@ -66,7 +70,7 @@ int main(int argc, char** argv) {
         std::cerr << "Usage:\n"
                   << "  ./benchmark --db=<type> --input=<file> --mode=time\n"
                   << "  ./benchmark --db=<type> --input=<file> --mode=memory\n"
-                  << "\nDB types: 1, 1L, 2, 2L, 3\n";
+                  << "\nDB types: 1, 1L, 1S, 2, 2L, 2S, 3\n";
         return 1;
     }
 
