@@ -66,11 +66,11 @@ bool StudentDB_1::change_group(const std::string &email, const std::string &new_
 std::string StudentDB_1::find_group_with_max_same_birthday() {
     int max_group = -1;
     std::string max_group_str;
-    for (auto&[fst, snd]: group_birth_count) {
-        for (const auto &val: snd | std::views::values) {
-            if (val  > max_group) {
-                max_group = val ;
-                max_group_str = fst;
+    for (auto&[group, brd_cnt]: group_birth_count) {
+        for (const auto &cnt: brd_cnt | std::views::values) {
+            if (cnt  > max_group) {
+                max_group = cnt ;
+                max_group_str = group;
             }
         }
     }

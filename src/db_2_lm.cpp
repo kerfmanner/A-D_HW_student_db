@@ -57,11 +57,11 @@ std::string StudentDB_2LessMemory::find_group_with_max_same_birthday() {
     std::string best;
     int mx = -1;
 
-    for (auto& [g, vec] : group_birth_count) {
-        for (auto c : vec) {
-            if (c > mx) {
-                mx = c;
-                best = g;
+    for (auto& [group, counts] : group_birth_count) {
+        for (auto cnt : counts) {
+            if (cnt > mx) {
+                mx = cnt;
+                best = group;
             }
         }
     }

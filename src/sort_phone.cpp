@@ -45,18 +45,18 @@ static void radix_sort_indices(
 
         int count[BASE] = {0};
 
-        for (size_t id : idx) {
-            char d = keys[id][pos] - '0';
-            count[(unsigned char)d]++;
+        for (const size_t id : idx) {
+            const char d = keys[id][pos] - '0';
+            count[static_cast<unsigned char>(d)]++;
         }
 
         for (int i = 1; i < BASE; ++i)
             count[i] += count[i - 1];
 
-        for (int i = (int)idx.size() - 1; i >= 0; --i) {
-            size_t id = idx[i];
-            char d = keys[id][pos] - '0';
-            tmp[--count[(unsigned char)d]] = id;
+        for (int i = static_cast<int>(idx.size()) - 1; i >= 0; --i) {
+            const size_t id = idx[i];
+            const char d = keys[id][pos] - '0';
+            tmp[--count[static_cast<unsigned char>(d)]] = id;
         }
 
         idx.swap(tmp);
@@ -64,15 +64,13 @@ static void radix_sort_indices(
 }
 
 
-// =========================================================
-// Public radix sort interface
-// =========================================================
+// radix sort interface
 void sort_by_phone_radix(std::vector<Student>& students)
 {
     size_t n = students.size();
     if (n == 0) return;
 
-    // normalize once into big vector
+    // normalize
     std::vector<std::array<char,12>> keys;
     keys.reserve(n);
     for (auto& s : students) {

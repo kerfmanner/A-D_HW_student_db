@@ -21,7 +21,7 @@ public:
     std::string find_group_with_max_same_birthday() override;
 
 private:
-    // Primary storage
+    // storage
     std::vector<Student> students;
 
     // email -> student
