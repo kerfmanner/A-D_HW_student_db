@@ -62,7 +62,8 @@
     ├── student.cpp
 ```
 </details> 
-----------------------  
+----------------------
+
 ### DBs data structures
 
 #### Database Implementations Overview
