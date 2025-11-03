@@ -55,7 +55,6 @@ static size_t get_peak_rss_kb()
     std::string line;
     while (std::getline(f, line)) {
         if (line.rfind("VmHWM:", 0) == 0) {
-            // format:  "VmHWM: <space> #### kB"
             std::string kb = line.substr(6);
             return std::stoul(kb);
         }
@@ -64,7 +63,18 @@ static size_t get_peak_rss_kb()
 }
 
 
+// precomputed operation representation
+enum class OpType { FIND_BIRTH, CHANGE_GROUP, FIND_MAX };
+
+struct Op {
+    OpType type;
+    int student_idx;
+};
+
+
 int main(int argc, char** argv) {
+
+    std::cout << "[0] Starting benchmark executable\n";
 
     if (argc < 4) {
         std::cerr << "Usage:\n"
@@ -78,7 +88,8 @@ int main(int argc, char** argv) {
     std::string input_path;
     std::string mode;
 
-    // parse args
+    std::cout << "[1] Parsing CLI arguments\n";
+
     for (int i = 1; i < argc; ++i) {
         std::string a = argv[i];
         if (a.rfind("--db=", 0) == 0) {
@@ -95,82 +106,127 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::cout << "[2] Creating DB instance: " << db_name << "\n";
     auto db = make_db(db_name);
 
 
-    // mode memory
+    // memory mode
     if (mode == "memory") {
 
-        // load DB
+        std::cout << "[3] Memory mode selected\n";
+        std::cout << "[4] Loading DB input\n";
         db->load(input_path);
 
         size_t input_size = 0;
         {
-            std::vector<Student> tmp = read_students_from_csv(input_path);
+            std::cout << "[5] Loading CSV to measure input size\n";
+            auto tmp = read_students_from_csv(input_path);
             input_size = tmp.size();
         }
 
-        // get memory statistics
+        std::cout << "[6] Measuring peak RSS\n";
         size_t peak_kb = get_peak_rss_kb();
-
-        // write record
+        // same ratio as before (100, 100, 1)
+        std::cout << "[7] Memory stats: " << peak_kb << "\n";
+        std::cout << "[8] Writing memory stats to CSV\n";
         append_csv("memory.csv", db_name, input_size, peak_kb);
 
+        std::cout << "[9] Done (memory mode)\n";
         return 0;
     }
 
 
 
-    // mode time
+    // time mode
     if (mode == "time") {
 
+        std::cout << "[3] Time mode selected\n";
+
+        std::cout << "[4] Loading DB input\n";
         db->load(input_path);
 
-        // Load a local student list only for sampling operations
+        std::cout << "[5] Loading students from CSV\n";
         auto students = read_students_from_csv(input_path);
         size_t input_size = students.size();
+        if (input_size == 0) {
+            std::cerr << "No input data.\n";
+            return 1;
+        }
 
-        // ratio A:B:C = 100:100:1
-        const int A = 100;
-        const int B = 100;
-        const int C = 1;
-        const int Sum = A + B + C;
+        constexpr int A = 100;
+        constexpr int B = 100;
+        constexpr int C = 1;
+        constexpr int Sum = A + B + C;
+
+        std::cout << "[6] Precomputing operations list\n";
 
         std::mt19937 rng(std::random_device{}());
         std::uniform_int_distribution<int> dist(1, Sum);
-        std::uniform_int_distribution<int> idx_dist(0, (int)students.size() - 1);
+        std::uniform_int_distribution<int> idx_dist(0, static_cast<int>(input_size) - 1);
 
-        size_t ops = 0;
+        constexpr size_t MAX_PRE_OPS = 2000000ULL;
+        std::vector<Op> ops;
+        ops.reserve(MAX_PRE_OPS);
+
+        for (size_t i = 0; i < MAX_PRE_OPS; ++i) {
+            int x = dist(rng);
+            Op op{};
+
+            if (x <= A) {
+                op.type = OpType::FIND_BIRTH;
+                op.student_idx = idx_dist(rng);
+            }
+            else if (x <= A + B) {
+                op.type = OpType::CHANGE_GROUP;
+                op.student_idx = idx_dist(rng);
+            }
+            else {
+                op.type = OpType::FIND_MAX;
+                op.student_idx = -1;
+            }
+
+            ops.push_back(op);
+        }
+
+        std::cout << "[7] Starting timed execution (10s)\n";
+
+        size_t op_count = 0;
         auto start = std::chrono::steady_clock::now();
         auto end_time = start + std::chrono::seconds(10);
 
         while (std::chrono::steady_clock::now() < end_time) {
 
-            int x = dist(rng);
+            const Op& op = ops[op_count % ops.size()];
 
-            if (x <= A) {
-                auto& s = students[idx_dist(rng)];
-                db->find_by_birth(s.m_birth_month, s.m_birth_day);
-            }
-            else if (x <= A + B) {
-                auto& s = students[idx_dist(rng)];
-                db->change_group(s.m_email, "NEW_GROUP");
-            }
-            else {
-                db->find_group_with_max_same_birthday();
+            switch (op.type) {
+                case OpType::FIND_BIRTH: {
+                    auto& s = students[op.student_idx];
+                    db->find_by_birth(s.m_birth_month, s.m_birth_day);
+                } break;
+
+                case OpType::CHANGE_GROUP: {
+                    auto& s = students[op.student_idx];
+                    db->change_group(s.m_email, "NEW_GROUP");
+                } break;
+
+                case OpType::FIND_MAX:
+                    db->find_group_with_max_same_birthday();
+                    break;
             }
 
-            ++ops;
+            ++op_count;
         }
 
-        append_csv("ops.csv", db_name, input_size, ops);
+        std::cout << "[8] Benchmark finished, ops = " << op_count << "\n";
+        std::cout << "[9] Writing results to CSV\n";
 
+        append_csv("ops.csv", db_name, input_size, op_count);
+
+        std::cout << "[10] Done (time mode)\n";
         return 0;
     }
 
 
-
-    // Unknown mode
     std::cerr << "Unknown mode: " << mode << "\n";
     return 1;
 }

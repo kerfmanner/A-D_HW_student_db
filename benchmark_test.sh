@@ -6,7 +6,7 @@ echo "db,input_size,peak_kb" > memory.csv
 
 for db in 1 1L 1S 2 2L 2S 3; do
   for n in 100 1000 10000 100000; do
-    echo "*** DB=$db  N=$n ***"
+    echo "----------------- DB=$db  N=$n -----------------"
 
     # time benchmark
     ./build/benchmark --db=$db --input=./dataset/${n}.csv --mode=time
