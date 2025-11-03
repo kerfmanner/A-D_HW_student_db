@@ -17,7 +17,7 @@ int main() {
     // doesn't exist
 
     if (db.find_by_birth(8, 12).empty()) {
-        std::cout << "No student with birthday month 8  day12\n";
+        std::cout << "No student with birthday month 8 day 12\n";
     }
     std::cout << students[1].m_group + "\n";
 
@@ -29,9 +29,7 @@ int main() {
     db.change_group("big_black_plane@dg.net", "VET-47");
     // nothing
 
-
     std::cout << db.find_group_with_max_same_birthday() + "\n";
-
 
     // move person from XBO-96 some else
     db.change_group("andriy.kovalchuk@student.org", "VET-47");
