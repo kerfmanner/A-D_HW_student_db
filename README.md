@@ -62,8 +62,9 @@
     ├── student.cpp
 ```
 </details> 
-----------------------
+----------------------  
 ### DBs data structures
+
 #### Database Implementations Overview
 
 All database backends implement inteface:
