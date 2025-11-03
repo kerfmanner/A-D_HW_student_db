@@ -108,3 +108,38 @@ public:
 
 ### Results
 Result are in the result directory, graphs are in the jupyter notebook(**PS they use logarithmic scale).
+
+
+### Build
+Do those steps consequently:
+```
+mkdir build
+```
+```
+cd build
+```
+```
+cmake ..
+```
+```
+make
+```
+Now to run benchmark tests
+```
+cd ..
+```
+```
+./benchmark_test.sh
+```
+if doesn't run give execute permission:
+```
+chmod +x ./benchmark_test.sh
+```
+Same with sort_bench.sh for sorting benchmark.
+
+If you want to see test of functionality, go to build directory and run:
+```
+./hmw_1
+```
+.
+```
