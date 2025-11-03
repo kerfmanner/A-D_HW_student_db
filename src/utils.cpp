@@ -1,7 +1,3 @@
-//
-// Created by konov on 11/1/2025.
-//
-
 #include "../include/utils.hpp"
 #include <fstream>
 #include <iostream>

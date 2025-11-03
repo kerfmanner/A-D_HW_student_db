@@ -1,7 +1,3 @@
-//
-// Created by konov on 11/1/2025.
-//
-
 #include "../include/db_2_lm.hpp"
 #include <ranges>
 #include "utils.hpp"

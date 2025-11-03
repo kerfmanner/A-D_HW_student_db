@@ -1,7 +1,3 @@
-//
-// Created by luka on 11/2/25.
-//
-
 #include "../include/dp2_sp.hpp"
 #include <ranges>
 #include "utils.hpp"

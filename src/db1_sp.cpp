@@ -1,12 +1,3 @@
-//
-// Created by luka on 11/2/25.
-//
-
-
-//
-// Created by konov on 11/1/2025.
-//
-
 #include "../include/db1_sp.hpp"
 #include <ranges>
 #include "utils.hpp"
@@ -42,7 +33,10 @@ bool StudentDB_1Speed::change_group(const std::string &email, const std::string 
     if (!email_map.contains(email)) return false;
     Student *student = email_map[email];
 
-    if (student->m_group == new_group) {
+   //
+// Created by konov on 11/1/2025.
+//
+ if (student->m_group == new_group) {
         return true;
     }
 

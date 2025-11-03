@@ -1,7 +1,3 @@
-//
-// Created by luka on 11/2/25.
-//
-
 #ifndef HMW_1_DP2_SP_HPP
 #define HMW_1_DP2_SP_HPP
 

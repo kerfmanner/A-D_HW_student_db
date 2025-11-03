@@ -1,7 +1,3 @@
-//
-// Created by konov on 11/1/2025.
-//
-
 #ifndef HMW_1_DP_1_LM_HPP
 #define HMW_1_DP_1_LM_HPP
 #include <cstdint>

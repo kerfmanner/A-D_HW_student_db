@@ -1,7 +1,3 @@
-//
-// Created by luka on 11/2/25.
-//
-
 #ifndef HMW_1_DB1_SP_H
 #define HMW_1_DB1_SP_H
 
