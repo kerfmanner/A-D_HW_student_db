@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 
         std::cout << "[6] Precomputing operations list\n";
 
-        std::mt19937 rng(std::random_device{}());
+        std::mt19937 rng(123456);
         std::uniform_int_distribution<int> dist(1, Sum);
         std::uniform_int_distribution<int> idx_dist(0, static_cast<int>(input_size) - 1);
 
