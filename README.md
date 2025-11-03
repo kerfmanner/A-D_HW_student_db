@@ -141,5 +141,3 @@ If you want to see test of functionality, go to build directory and run:
 ```
 ./hmw_1
 ```
-.
-```
